@@ -14,35 +14,30 @@ import java.time.format.DateTimeFormatter;
 public class ChatWindow extends JFrame {
     private int WINDOW_POS_X = 100;
     private int WINDOW_POS_Y = 300;
-    private int WINDOW_WIDTH = 450;
-    private int WINDOW_HEIGHT = 500;
-    private String WINDOW_TITLE = "Чат с логированием, сервер :";
+    private int WINDOW_WIDTH = 550;
+    private int WINDOW_HEIGHT = 350;
 
     private String login;
     private String server;
     private Logging logging;
     private String msgText = "";
-    private JButton sendButton = new JButton("Отправить");
-    private JLabel inputLabel = new JLabel("Введите сообщение");
+    private JButton sendButton = new JButton("Send");
+    private JLabel inputLabel = new JLabel("Send message");
     private JTextField inputField = new JTextField();
     private JTextArea outputField = new JTextArea();
     private JPanel mainGrid = new JPanel(new GridLayout(1,2));
     private JPanel inputGrid = new JPanel(new GridLayout(3,1));
 
     ChatWindow(String login, String server, Logging logging) throws IOException{
+        super("Sever: " + server);
         this.logging = logging;
         this.login = login;
         this.server = server;
-        WINDOW_TITLE =  WINDOW_TITLE + server;
-        //параметрирование окна
+
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setTitle(WINDOW_TITLE);
         setBounds(WINDOW_POS_X, WINDOW_POS_Y, WINDOW_WIDTH, WINDOW_HEIGHT);
         initWindow();
 
-
-
-        //сборка окна
         inputGrid.add(outputField);
         inputGrid.add(inputLabel);
         inputGrid.add(inputField);
@@ -53,7 +48,6 @@ public class ChatWindow extends JFrame {
     }
 
     private void initWindow() throws IOException{
-        //инициализация поля вывода
         outputField.enableInputMethods(false);
         outputField.setBackground(Color.LIGHT_GRAY);
 
@@ -65,12 +59,10 @@ public class ChatWindow extends JFrame {
         }
         outputField.setText(builder.toString());
 
-
-        //поле ввода-вывода
         sendButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-                String dt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yy/MM/dd HH:mm:ss")).toString();
+                String dt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")).toString();
                 String msgText = dt + " " + login + ": " + inputField.getText();
                 try {
                     logging.Write(msgText);
@@ -91,7 +83,7 @@ public class ChatWindow extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    String dt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yy/MM/dd HH:mm:ss")).toString();
+                    String dt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")).toString();
                     String msgText = dt + " " + login + ": " + inputField.getText();
                     try {
                         logging.Write(msgText);
